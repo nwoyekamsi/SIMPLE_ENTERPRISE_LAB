@@ -22,7 +22,7 @@ SSH/Telnet remote management, and FTP.
 
 <h2>Topology</h2>
 <p align="center">
-<img src="images/topology.png" height="85%" width="85%" alt="Network Topology Diagram"/>
+<img src="https://imgur.com/ZiGfN4E" height="85%" width="85%" alt="Network Topology Diagram"/>
 </p>
 
 <h2>Network Summary</h2>
