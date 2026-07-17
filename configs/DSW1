@@ -1,0 +1,148 @@
+DSW1#sh running-config 
+Building configuration...
+
+Current configuration : 2461 bytes
+!
+version 17.6
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname DSW1
+!
+!
+!
+!
+!
+!
+!
+no ip cef
+ip routing
+!
+no ipv6 cef
+!
+!
+!
+ptp mode e2etransparent
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree vlan 30 priority 20480
+spanning-tree vlan 10,20,40 priority 24576
+!
+!
+!
+!
+!
+!
+interface Port-channel1
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+!
+interface Port-channel2
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+!
+interface GigabitEthernet1/1
+!
+interface GigabitEthernet1/2
+!
+interface GigabitEthernet1/3
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+ spanning-tree link-type point-to-point
+ channel-group 1 mode active
+!
+interface GigabitEthernet1/4
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+ spanning-tree link-type point-to-point
+ channel-group 1 mode active
+!
+interface GigabitEthernet1/5
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+ spanning-tree link-type point-to-point
+ channel-group 2 mode active
+!
+interface GigabitEthernet1/6
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+ spanning-tree link-type point-to-point
+ channel-group 2 mode active
+!
+interface GigabitEthernet1/7
+ no switchport
+ ip address 10.0.0.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet1/8
+!
+interface GigabitEthernet1/9
+!
+interface GigabitEthernet1/10
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan10
+ mac-address 0001.c921.4b01
+ ip address 192.168.10.1 255.255.255.0
+ ip helper-address 192.168.40.100
+!
+interface Vlan20
+ mac-address 0001.c921.4b02
+ ip address 192.168.20.1 255.255.255.0
+ ip helper-address 192.168.40.100
+!
+interface Vlan30
+ mac-address 0001.c921.4b03
+ ip address 192.168.30.1 255.255.255.0
+ ip helper-address 192.168.40.100
+!
+interface Vlan40
+ mac-address 0001.c921.4b04
+ ip address 192.168.40.1 255.255.255.0
+ ip helper-address 192.168.40.100
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.0.0.1 
+!
+ip flow-export version 9
+!
+!
+access-list 100 deny ip 192.168.10.0 0.0.0.255 host 192.168.40.100
+access-list 100 permit ip any any
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+!
+end
