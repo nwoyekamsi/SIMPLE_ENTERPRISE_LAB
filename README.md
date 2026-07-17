@@ -76,11 +76,14 @@ SSH/Telnet remote management, and FTP.
 - <b>Extended ACLs</b> - inter-VLAN traffic filtering (e.g., restricting USERS from reaching IT/MANAGEMENT)
 - <b>SSH</b> - disable Telnet in favor of encrypted remote management
 - <b>FTP</b> - internal file transfer service
+- <b>STP VLAN Load Balancing</b> - reduce congestion on the single distribution switch
+- <b>Redundant Distribution Layer</b> - Backup distribution switch
+- <b>WAN/Internet Redundancy</b> - Deploy a secondary router connected to the ISP
 <br />
 
 <h2>Environment Used</h2>
 
-- <b>Cisco Packet Tracer</b> 8.2.x
+- <b>Cisco Packet Tracer</b> 
 <br />
 
 <h2>Build Walkthrough</h2>
@@ -88,31 +91,40 @@ SSH/Telnet remote management, and FTP.
 <p align="center">
 
 Base topology and cabling: <br/>
-<img src="images/01-topology.png" height="80%" width="80%" alt="Base topology"/>
+<img src="https://github.com/user-attachments/assets/7e11519d-03aa-42fc-996f-c2227ad36d53" height="50%" width="50%" alt="Base topology"/>
 <br /><br />
 
 VLAN creation and trunk configuration on access switches: <br/>
-<img src="images/02-vlans-trunks.png" height="80%" width="80%" alt="VLAN and trunk config"/>
+<img src="https://github.com/user-attachments/assets/2968c3c0-56ec-45f8-92f3-5f797a4f503e" height="50%" width="50%" alt="VLAN and trunk config"/>
+<img src="https://github.com/user-attachments/assets/d0855212-c596-4349-81fc-b31a4381fe1b" height="50%" width="50%" alt="VLAN and trunk config"/>
+<img src="https://github.com/user-attachments/assets/7f3245fe-5f0b-4f0c-b750-76b1eb51272b" height="50%" width="50%" alt="VLAN and trunk config"/>
 <br /><br />
 
 EtherChannel (LACP) configuration and verification - <code>show etherchannel summary</code>: <br/>
-<img src="images/03-etherchannel.png" height="80%" width="80%" alt="EtherChannel verification"/>
+<img src="https://github.com/user-attachments/assets/a6ac6bac-00f8-4b82-b9df-ae578e5f91d9" height="50%" width="50%" alt="EtherChannel verification"/>
+<img src="https://github.com/user-attachments/assets/09e8aad7-dd0a-4d3c-9321-9dda9badd64f" height="50%" width="50%" alt="EtherChannel verification"/>
+<img src="https://github.com/user-attachments/assets/f5dd23ca-59a8-48e6-9a36-f9a80a344b75" height="50%" width="50%" alt="EtherChannel verification"/>
 <br /><br />
 
 Inter-VLAN routing via SVIs on DSW1 - <code>show ip route</code>: <br/>
-<img src="https://github.com/user-attachments/assets/e8bffec4-317a-42c1-8f81-f72348ab1bd5" height="80%" width="80%" alt="Inter-VLAN routing"/>
+<img src="https://github.com/user-attachments/assets/e8bffec4-317a-42c1-8f81-f72348ab1bd5" height="50%" width="50%" alt="Inter-VLAN routing"/>
 <br /><br />
 
-RSTP verification with PortFast/BPDU Guard on access ports - <code>show spanning-tree</code>: <br/>
-<img src="images/05-rstp.png" height="80%" width="80%" alt="RSTP verification"/>
+RSTP verification with PortFast/BPDU Guard on access ports - <code>show spanning-tree summary</code>: <br/>
+<img src="https://github.com/user-attachments/assets/68d0180c-3203-4695-a061-84e0e1321a9f" height="50%" width="50%" alt="RSTP verification"/>
+<img src="https://github.com/user-attachments/assets/c50f3f48-2ba1-4179-bc8b-d2d5e8c2aeb5" height="50%" width="50%" alt="RSTP verification"/>
+<img src="https://github.com/user-attachments/assets/8ed64406-01e2-4f11-9c66-7180904abfa8" height="50%" width="50%" alt="RSTP verification"/>
 <br /><br />
 
 DHCP scopes and lease verification from client PCs: <br/>
-<img src="images/06-dhcp.png" height="80%" width="80%" alt="DHCP verification"/>
+<img src="https://github.com/user-attachments/assets/548db6f0-8fbb-4d33-9008-0cf6bbb4282c" height="50%" width="50%" alt="DHCP verification"/>
+<img src="https://github.com/user-attachments/assets/4937d4fc-1562-4ef1-9f47-3aee63064e13" height="50%" width="50%" alt="DHCP verification"/>
+<img src="https://github.com/user-attachments/assets/e6584d7c-907a-4994-8ba7-d411c303c06d" height="50%" width="50%" alt="DHCP verification"/>
 <br /><br />
 
 End-to-end connectivity test across VLANs (ping/traceroute): <br/>
-<img src="images/07-connectivity-test.png" height="80%" width="80%" alt="Connectivity testing"/>
+<img src="https://github.com/user-attachments/assets/397718df-2700-42be-b655-50cf5ec818b5" height="50%" width="50%" alt="Connectivity testing"/>
+<img src="https://github.com/user-attachments/assets/1021cb85-113f-4a07-b49c-0b793f1a4413" height="50%" width="50%" alt="Connectivity testing"/>
 
 </p>
 
@@ -122,10 +134,8 @@ Documenting issues I hit and fixed is part of the point of this repo - it shows 
 troubleshooting process, not just a finished config.
 </p>
 
-- Trunk allowed-VLAN lists on ASW1/ASW2 initially omitted VLAN 40, which silently blocked IT traffic across the trunk despite the VLAN existing locally.
-- Mismatched port-channel vs. physical interface configuration caused an EtherChannel to sit in <code>SD</code> (suspended) state; fixed by ensuring identical speed/duplex/switchport mode on all bundle members before enabling LACP.
-- Inconsistent STP link-type settings on point-to-point EtherChannel links delayed convergence; explicitly setting link-type as point-to-point resolved it.
-- Applied and tested an extended ACL to confirm VLAN 10 could not reach VLAN 40, then removed it since ACLs are formally scheduled for Phase 2.
+- <b>EtherChannel forming in SU (Layer 2, not bundled) state despite correct LACP configuration -</b> Interface-level configuration matched on both ends, so I checked the physical layer and found a media mismatch — one member link was cabled with FastEthernet (100 Mbps) while its partner was GigabitEthernet (1000 Mbps). EtherChannel requires all bundle members to match on speed and duplex, so the mismatched cable was replaced with GigabitEthernet on both ends rather than forcing the faster port down to 100 Mbps, preserving full bundle bandwidth.
+- <b>DNS name resolution failing (ping by hostname unsuccessful) despite a correctly configured DNS server address on the DHCP scope -</b> Verified the DHCP server configuration first and confirmed the DNS server IP was scoped correctly. The root cause was on the client side: the test PC held an existing DHCP lease issued before the DNS server setting was added, so it hadn't yet received the updated option. Releasing and renewing the IP configuration (ipconfig /renew equivalent in Packet Tracer) pulled the current lease, including the DNS server address, and resolved the failure — a reminder that DHCP option changes don't retroactively apply to already-leased clients. <b>**NOTE: THE PCs WITHOUT LABELED IP ADDRESSES ARE DYNAMICALLY CONFIGURED.**</b>
 <br />
 
 <h2>What This Project Demonstrates</h2>
