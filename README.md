@@ -22,7 +22,7 @@ SSH/Telnet remote management, and FTP.
 
 <h2>Topology</h2>
 <p align="center">
-<img src="https://imgur.com/ZiGfN4E" height="85%" width="85%" alt="Network Topology Diagram"/>
+<img src="https://github.com/user-attachments/assets/3256bdcf-9ff2-45c1-baed-309d528fb749" height="85%" width="85%" alt="Network Topology Diagram"/>
 </p>
 
 <h2>Network Summary</h2>
@@ -100,7 +100,7 @@ EtherChannel (LACP) configuration and verification - <code>show etherchannel sum
 <br /><br />
 
 Inter-VLAN routing via SVIs on DSW1 - <code>show ip route</code>: <br/>
-<img src="images/04-inter-vlan-routing.png" height="80%" width="80%" alt="Inter-VLAN routing"/>
+<img src="https://github.com/user-attachments/assets/e8bffec4-317a-42c1-8f81-f72348ab1bd5" height="80%" width="80%" alt="Inter-VLAN routing"/>
 <br /><br />
 
 RSTP verification with PortFast/BPDU Guard on access ports - <code>show spanning-tree</code>: <br/>
