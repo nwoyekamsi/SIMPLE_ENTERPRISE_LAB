@@ -1,14 +1,14 @@
-DSW1#sh running-config 
+DSW2#SH RUNNing-config 
 Building configuration...
 
-Current configuration : 3200 bytes
+Current configuration : 3224 bytes
 !
 version 17.6
 no service timestamps log datetime msec
 no service timestamps debug datetime msec
 no service password-encryption
 !
-hostname DSW1
+hostname DSW2
 !
 !
 !
@@ -36,8 +36,8 @@ ptp mode e2etransparent
 !
 !
 spanning-tree mode rapid-pvst
-spanning-tree vlan 10,30 priority 24576
-spanning-tree vlan 20,40 priority 28672
+spanning-tree vlan 20,40 priority 24576
+spanning-tree vlan 10,30 priority 28672
 !
 !
 !
@@ -45,35 +45,37 @@ spanning-tree vlan 20,40 priority 28672
 !
 !
 interface Loopback0
- ip address 11.11.11.11 255.255.255.255
-!
-interface Port-channel1
- switchport trunk native vlan 1001
- switchport trunk allowed vlan 10,20,30,40
- switchport mode trunk
+ ip address 22.22.22.22 255.255.255.255
 !
 interface Port-channel2
  switchport trunk native vlan 1001
  switchport trunk allowed vlan 10,20,30,40
  switchport mode trunk
 !
+interface Port-channel4
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+!
 interface GigabitEthernet1/1
+ shutdown
 !
 interface GigabitEthernet1/2
+ shutdown
 !
 interface GigabitEthernet1/3
- switchport trunk native vlan 1001
- switchport trunk allowed vlan 10,20,30,40
- switchport mode trunk
- spanning-tree link-type point-to-point
- channel-group 1 mode active
+ no switchport
+ ip address 10.0.2.2 255.255.255.252
+ ip ospf cost 10
+ duplex auto
+ speed auto
 !
 interface GigabitEthernet1/4
- switchport trunk native vlan 1001
- switchport trunk allowed vlan 10,20,30,40
- switchport mode trunk
- spanning-tree link-type point-to-point
- channel-group 1 mode active
+ no switchport
+ ip address 10.0.4.2 255.255.255.252
+ ip ospf cost 10
+ duplex auto
+ speed auto
 !
 interface GigabitEthernet1/5
  switchport trunk native vlan 1001
@@ -90,70 +92,70 @@ interface GigabitEthernet1/6
  channel-group 2 mode active
 !
 interface GigabitEthernet1/7
- no switchport
- ip address 10.0.1.2 255.255.255.252
- ip ospf cost 10
- duplex auto
- speed auto
 !
 interface GigabitEthernet1/8
- no switchport
- ip address 10.0.3.2 255.255.255.252
- ip ospf cost 10
- duplex auto
- speed auto
 !
 interface GigabitEthernet1/9
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+ spanning-tree link-type point-to-point
+ channel-group 4 mode active
 !
 interface GigabitEthernet1/10
+ switchport trunk native vlan 1001
+ switchport trunk allowed vlan 10,20,30,40
+ switchport mode trunk
+ spanning-tree link-type point-to-point
+ channel-group 4 mode active
 !
 interface Vlan1
  no ip address
  shutdown
 !
 interface Vlan10
- mac-address 0001.c921.4b01
- ip address 192.168.10.1 255.255.255.0
+ mac-address 0001.96d8.2401
+ ip address 192.168.10.22 255.255.255.0
  ip helper-address 192.168.40.100
  standby version 2
  standby 1 ip 192.168.10.23
- standby 1 priority 110
  standby 1 preempt
 !
 interface Vlan20
- mac-address 0001.c921.4b02
- ip address 192.168.20.1 255.255.255.0
+ mac-address 0001.96d8.2402
+ ip address 192.168.20.22 255.255.255.0
  ip helper-address 192.168.40.100
  standby version 2
  standby 1 ip 192.168.20.23
- standby 1 preempt
-!
-interface Vlan30
- mac-address 0001.c921.4b03
- ip address 192.168.30.1 255.255.255.0
- ip helper-address 192.168.40.100
- standby version 2
- standby 1 ip 192.168.30.23
  standby 1 priority 110
  standby 1 preempt
 !
+interface Vlan30
+ mac-address 0001.96d8.2403
+ ip address 192.168.30.22 255.255.255.0
+ ip helper-address 192.168.40.100
+ standby version 2
+ standby 1 ip 192.168.30.23
+ standby 1 preempt
+!
 interface Vlan40
- mac-address 0001.c921.4b04
- ip address 192.168.40.1 255.255.255.0
+ mac-address 0001.96d8.2404
+ ip address 192.168.40.22 255.255.255.0
  ip helper-address 192.168.40.100
  standby version 2
  standby 1 ip 192.168.40.23
+ standby 1 priority 110
  standby 1 preempt
 !
 router ospf 1
- router-id 11.11.11.11
+ router-id 22.22.22.22
  log-adjacency-changes
- network 10.0.1.0 0.0.0.3 area 0
+ network 10.0.2.0 0.0.0.3 area 0
  network 192.168.10.0 0.0.0.255 area 0
  network 192.168.20.0 0.0.0.255 area 0
  network 192.168.30.0 0.0.0.255 area 0
  network 192.168.40.0 0.0.0.255 area 0
- network 10.0.3.0 0.0.0.3 area 0
+ network 10.0.4.0 0.0.0.3 area 0
 !
 ip classless
 !

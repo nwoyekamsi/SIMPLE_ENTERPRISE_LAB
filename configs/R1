@@ -1,7 +1,7 @@
-R1#sh running-config 
+R1#SH RUNNing-config 
 Building configuration...
 
-Current configuration : 888 bytes
+Current configuration : 1228 bytes
 !
 version 15.1
 no service timestamps log datetime msec
@@ -17,7 +17,7 @@ hostname R1
 !
 !
 !
-ip cef
+no ip cef
 no ipv6 cef
 !
 !
@@ -44,8 +44,11 @@ spanning-tree mode pvst
 !
 !
 !
+interface Loopback0
+ ip address 1.1.1.1 255.255.255.255
+!
 interface GigabitEthernet0/0
- ip address 10.0.0.1 255.255.255.252
+ ip address 10.0.1.1 255.255.255.252
  duplex auto
  speed auto
 !
@@ -55,19 +58,35 @@ interface GigabitEthernet0/1
  speed auto
 !
 interface GigabitEthernet0/2
- no ip address
+ ip address 10.0.2.1 255.255.255.252
  duplex auto
  speed auto
- shutdown
+!
+interface FastEthernet0/0/0
+ switchport mode access
+!
+interface FastEthernet0/0/1
+ switchport mode access
+!
+interface FastEthernet0/0/2
+ switchport mode access
+!
+interface FastEthernet0/0/3
+ switchport mode access
 !
 interface Vlan1
  no ip address
  shutdown
 !
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ network 10.0.1.0 0.0.0.3 area 0
+ network 10.0.2.0 0.0.0.3 area 0
+ network 200.1.1.0 0.0.0.3 area 0
+ default-information originate
+!
 ip classless
-ip route 192.168.10.0 255.255.255.0 10.0.0.2 
-ip route 192.168.20.0 255.255.255.0 10.0.0.2 
-ip route 192.168.30.0 255.255.255.0 10.0.0.2 
 ip route 0.0.0.0 0.0.0.0 200.1.1.1 
 !
 ip flow-export version 9
